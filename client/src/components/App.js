@@ -45,6 +45,17 @@ function App() {
     setUsers([...users, newUser]);
   }
 
+  function handleDeleteMovie(id){
+    fetch(`/movies/${id}`, {
+      method:'DELETE',
+    })
+    .then(res => {
+      if (res.ok) {
+        setMovies((movies) => movies.filter((movie) => movie.id !== id))
+      }
+    })
+  }
+
   const moviesToDisplay = movies.filter(movie => movie.title.toLowerCase().includes(searchInput.toLowerCase()))
 
   return (
@@ -55,7 +66,7 @@ function App() {
           <Home setUser={setUser} />
         </Route>
         <Route path="/movies">
-          <MovieList movies={moviesToDisplay} user={user}/>
+          <MovieList movies={moviesToDisplay} user={user} handleDelete={handleDeleteMovie}/>
         </Route>
         <Route path="/login">
           <Login setUser={setUser}/>

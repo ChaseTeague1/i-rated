@@ -80,6 +80,22 @@ class Movies(Resource):
         movies = [movie.to_dict() for movie in Movie.query.all()]
 
         return make_response(movies, 200)
+    
+    def post(self):
+        data = request.get_json()
+
+        new_movie = Movie(
+            title = data['title'],
+            release_data = data['release_data'],
+            director = data['director'],
+            cast = data['cast'],
+            description = data['description'],
+            poster_image = data['poster_image']
+        )
+        db.session.add(new_movie)
+        db.session.commit()
+
+        return make_response(new_movie.to_dict(), 201)
 
 api.add_resource(Movies, '/movies')
 
@@ -89,6 +105,18 @@ class MovieById(Resource):
         movie = Movie.query.filter(Movie.id == id).first()
 
         return make_response(movie.to_dict(), 200)
+    
+    def delete(self, id):
+        movie = Movie.query.filter(Movie.id == id).first()
+
+        if movie: 
+            db.session.delete(movie)
+            db.session.commit()
+
+            body = {}
+
+            return make_response(body, 204)
+        return {'error':'Movie not found'} , 404
     
 api.add_resource(MovieById, '/movies/<int:id>')
 
