@@ -28,7 +28,7 @@ if __name__ == '__main__':
         for _ in range(10):
             user = User(
                 username=fake.user_name(),
-                password=fake.password(),
+                _password_hash=fake.text(),
                 profile_picture=fake.image_url(),
                 bio=fake.text(),
                 role=choice(['admin', 'user'])  # Use choice for a single selection

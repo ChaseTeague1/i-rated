@@ -13,6 +13,52 @@ from models import User, Movie, Genre, Review, MovieGenre
 
 # Views go here!
 
+class CheckSession(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if user_id:
+            user = User.query.filter(User.id == user_id).first()
+            if user:
+                return make_response(user.to_dict(), 200)
+        return {}, 401
+
+api.add_resource(CheckSession, '/check_session')
+
+class Login(Resource):
+    def post(self):
+        username = request.get_json()['username']
+        user = User.query.filter(User.username == username).first()
+
+        session['user_id'] = user.id
+
+        return make_response(user.to_dict(), 200)
+
+api.add_resource(Login, '/login')
+
+class Logout(Resource):
+    def delete(self):
+        session['user_id'] = None
+        return {}, 204
+
+api.add_resource(Logout, '/logout')
+
+
+class Signup(Resource):
+    def post(self):
+        data = request.get_json()
+
+        new_user = User(
+            username = data['username'],
+            role = data['role'],
+        )
+        new_user.password_hash = data['password']
+        db.session.add(new_user)
+        db.session.commit()
+
+        return make_response(new_user.to_dict(), 201)
+
+api.add_resource(Signup, '/signup')
+
 class Users(Resource):
     def get(self):
         users = [user.to_dict() for user in User.query.all()]
