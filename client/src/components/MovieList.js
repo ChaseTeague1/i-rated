@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Movie from './Movie';
+import Genres from "./Genres";
 
-function MovieList({ movies, user, handleDelete }) {
+function MovieList({ movies, user, handleDelete, handleGenreClick, genres, clearFilter }) {
     const [deleteWindow, setDeleteWindow] = useState(false)
+    const history = useHistory()
 
   const isAdmin = user && user.role === 'admin';
 
@@ -15,9 +18,10 @@ function MovieList({ movies, user, handleDelete }) {
 
   return (
     <div className="flex flex-col items-center">
+        <Genres clearFilter={clearFilter} handleGenreClick={handleGenreClick} genres={genres}/>
       {isAdmin && (
         <div className="mb-4">
-          <button className="bg-blue-500 text-white px-4 py-2">Add Movie</button>
+          <button onClick={() => history.push('/newmovie')} className="bg-blue-500 text-white px-4 py-2">Add Movie</button>
         </div>
       )}
       <div className="flex justify-center flex-wrap">

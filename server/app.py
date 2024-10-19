@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-
+from datetime import datetime
 # Remote library imports
 from flask import request, make_response, session
 from flask_restful import Resource
@@ -70,8 +70,19 @@ api.add_resource(Users, '/users')
 class UserById(Resource):
     def get(self, id):
         user = User.query.filter(User.id == id).first()
+        if user:
+            # Explicitly load the reviews with movie titles
+            reviews = []
+            for review in user.reviews:
+                review_data = review.to_dict()  # Serialize the review
+                review_data['movie'] = review.movie.to_dict() if review.movie else {'title': 'Unknown Movie'}
+                reviews.append(review_data)
 
-        return make_response(user.to_dict(), 200)
+            user_data = user.to_dict()
+            user_data['reviews'] = reviews
+            return make_response(user_data, 200)
+        return {'error': 'User not found'}, 404
+
 
 api.add_resource(UserById, '/users/<int:id>')
 
@@ -84,9 +95,15 @@ class Movies(Resource):
     def post(self):
         data = request.get_json()
 
+        if 'release_date' in data:
+            release_date_str = data['release_date']
+            release_date = datetime.strptime(release_date_str[:-1], "%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            release_date = None 
+
         new_movie = Movie(
             title = data['title'],
-            release_data = data['release_data'],
+            release_date = release_date,
             director = data['director'],
             cast = data['cast'],
             description = data['description'],
@@ -103,8 +120,15 @@ api.add_resource(Movies, '/movies')
 class MovieById(Resource):
     def get(self, id):
         movie = Movie.query.filter(Movie.id == id).first()
-
-        return make_response(movie.to_dict(), 200)
+        if movie:
+            # Explicitly load the reviews
+            reviews = [review.to_dict() for review in movie.reviews]
+            genres = [genre.to_dict() for genre in movie.genres]
+            movie_data = movie.to_dict()
+            movie_data['reviews'] = reviews
+            movie_data['genres'] = genres
+            return make_response(movie_data, 200)
+        return {'error': 'Movie not found'}, 404
     
     def delete(self, id):
         movie = Movie.query.filter(Movie.id == id).first()

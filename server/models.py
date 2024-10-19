@@ -73,9 +73,9 @@ class Review(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, nullable=False)
 
     user = db.relationship('User', back_populates='reviews', viewonly=True)
-    movie = db.relationship('Movie', back_populates='reviews', viewonly=True)
+    movie = db.relationship('Movie', back_populates='reviews')
 
-    serialize_rules = ('-user', '-movie')
+    serialize_rules = ('user', '-movie')
 
 class MovieGenre(db.Model, SerializerMixin):
     __tablename__ = 'moviegenres'

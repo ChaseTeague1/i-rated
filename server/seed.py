@@ -36,6 +36,8 @@ if __name__ == '__main__':
             users.append(user)
             db.session.add(user)
 
+        db.session.commit()  # Commit after users are added to ensure IDs are available
+
         # Create genres
         genres = []
         genre_names = ['Action', 'Drama', 'Comedy', 'Horror', 'Sci-Fi', 'Fantasy']
@@ -46,6 +48,8 @@ if __name__ == '__main__':
             )
             genres.append(genre)
             db.session.add(genre)
+
+        db.session.commit()  # Commit after genres are added
 
         # Create movies
         movies = []
@@ -61,18 +65,23 @@ if __name__ == '__main__':
             movies.append(movie)
             db.session.add(movie)
 
+        db.session.commit()  # Commit after movies are added
+
         # Create reviews
         reviews = []
         for _ in range(30):
+            user = choice(users)  # Sample 1 user
+            movie = choice(movies)  # Sample 1 movie
             review = Review(
-                user=rc(users, k=1)[0],  # Sample 1 user
-                movie=rc(movies, k=1)[0],  # Sample 1 movie
+                user_id=user.id,  # Set user_id from the chosen user
+                movie_id=movie.id,  # Set movie_id from the chosen movie
                 rating=randint(1, 5),
                 comment=fake.sentence(),
                 created_at=fake.date_time_this_year()
             )
             reviews.append(review)
-            db.session.add(review)
+
+        db.session.bulk_save_objects(reviews)  # Use bulk_save_objects for efficiency
 
         # Create movie-genre relationships
         for movie in movies:
@@ -84,7 +93,6 @@ if __name__ == '__main__':
                 )
                 db.session.add(movie_genre)
 
-        # Commit the transaction to the database
-        db.session.commit()
+        db.session.commit()  # Commit all changes to the database
 
         print("Seeding complete!")

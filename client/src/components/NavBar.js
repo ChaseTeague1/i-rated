@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Search from "./Search";
 import Login from "./Login";
+import Genres from "./Genres";
 
 function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, setUser}) {
     const [loginWindow, setLoginWindow] = useState(false)
