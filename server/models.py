@@ -1,6 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
+from datetime import datetime
 
 from config import db, bcrypt
 
@@ -70,7 +71,7 @@ class Review(db.Model, SerializerMixin):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String)
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     user = db.relationship('User', back_populates='reviews', viewonly=True)
     movie = db.relationship('Movie', back_populates='reviews')

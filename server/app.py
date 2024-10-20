@@ -50,6 +50,8 @@ class Signup(Resource):
         new_user = User(
             username = data['username'],
             role = data['role'],
+            bio = data['bio'],
+            profile_picture = data['profile_picture']
         )
         new_user.password_hash = data['password']
         db.session.add(new_user)
@@ -109,7 +111,17 @@ class Movies(Resource):
             description = data['description'],
             poster_image = data['poster_image']
         )
+        # Add the movie to the session, but don't commit yet
         db.session.add(new_movie)
+        
+        # Handle genre associations
+        genre_ids = data.get('genres', [])
+        for genre_id in genre_ids:
+            genre = Genre.query.get(genre_id)
+            if genre:
+                new_movie.genres.append(genre)
+        
+        # Commit the session after adding the movie and genre associations
         db.session.commit()
 
         return make_response(new_movie.to_dict(), 201)
@@ -142,6 +154,26 @@ class MovieById(Resource):
             return make_response(body, 204)
         return {'error':'Movie not found'} , 404
     
+    def patch(self, id):
+        movie = Movie.query.filter(Movie.id == id).first()
+        if movie:
+            data = request.get_json()
+            if 'title' in data:
+                movie.title = data['title']
+            if 'director' in data:
+                movie.director = data['director']
+            if 'cast' in data:
+                movie.cast = data['cast']
+            if 'description' in data:
+                movie.description = data['description']
+            if 'release_date' in data:
+                movie.release_date = datetime.strptime(data['release_date'], "%Y-%m-%d")
+            if 'poster_image' in data:
+                movie.poster_image = data['poster_image']
+            db.session.commit()
+            return make_response(movie.to_dict(), 200)
+        return {'error': 'Movie not found'}, 404
+    
 api.add_resource(MovieById, '/movies/<int:id>')
 
 class Reviews(Resource):
@@ -151,6 +183,28 @@ class Reviews(Resource):
         return make_response(reviews, 200)
     
 api.add_resource(Reviews, '/reviews')
+
+class MovieReviews(Resource):
+    def post(self, movie_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'error': 'User not logged in'}, 401  # Return error if user is not logged in
+
+        data = request.get_json()
+        new_review = Review(
+            comment=data['comment'],
+            rating=data['rating'],
+            user_id=user_id,  # Associate the review with the logged-in user
+            movie_id=movie_id  # Associate the review with the specified movie
+        )
+
+        db.session.add(new_review)
+        db.session.commit()
+
+        return make_response(new_review.to_dict(), 201)
+
+api.add_resource(MovieReviews, '/movies/<int:movie_id>/reviews')
+
 
 class ReviewById(Resource):
     def get(self, id):

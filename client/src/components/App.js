@@ -70,6 +70,7 @@ function App() {
     const movieData = {
       ...newMovie,
       release_date: formattedDate,
+      genre_id: newMovie.genres
     };
   
     fetch('/movies', {
@@ -108,10 +109,14 @@ function App() {
     return movie.moviegenres.some(mg => mg.genre_id === selectedGenre);
   });
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100 text-black'}`}>
-      <button onClick={toggleTheme} className="p-2 m-4">
-                Toggle to {isDarkMode ? 'Light' : 'Dark'} Mode
-        </button>
+    <div className={`min-h-screen bg-white dark:bg-gray-800`}>
+    <button
+        onClick={toggleTheme}
+        className="p-1 m-4 bg-gray-500 text-white dark:bg-green-400 rounded-2xl"
+    >
+        Toggle to {isDarkMode ? 'Light' : 'Dark'} Mode
+    </button>
+
       <NavBar genres={genres} setUser={setUser} searchInput={searchInput} setSearchInput={setSearchInput} users={users} user={user} onLogout={handleLogout} onNewUserSubmit={onNewUserSubmit} onLogin={handleLogin}/>
       <div className="flex justify-center">
       </div>
@@ -120,7 +125,7 @@ function App() {
           <Home setUser={setUser} />
         </Route>
         <Route exact path="/movies">
-          <MovieList clearFilter={clearFilter} handleGenreClick={handleGenreClick} genres={genres} movies={moviesToDisplay} user={user} handleDelete={handleDeleteMovie}/>
+          <MovieList clearFilter={clearFilter} handleGenreClick={handleGenreClick} genres={genres} setMovies={setMovies} movies={moviesToDisplay} user={user} handleDelete={handleDeleteMovie}/>
         </Route>
         <Route path="/login">
           <Login setUser={setUser}/>
@@ -129,7 +134,7 @@ function App() {
           <Signup onNewUserSubmit={onNewUserSubmit}/>
         </Route>
         <Route path="/newmovie">
-          <NewMovie onSubmit={onNewMovieSubmit} initialValues={{ title: '', release_date: '', director: '', cast: '', description: '', poster_image: '' }} />
+          <NewMovie genres={genres} onSubmit={onNewMovieSubmit} initialValues={{ title: '', release_date: '', director: '', cast: '', description: '', poster_image: '', genres: [] }} />
         </Route>
         <Route path="/movies/:id" render={(props) => <MovieDetail {...props} movies={movies} />} />
         <Route path="/users/:id" render={(props) => <UserDetail {...props} users={users} />} />

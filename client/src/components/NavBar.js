@@ -32,9 +32,9 @@ function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, s
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex justify-between items-center bg-gray-800 rounded-2xl w-5/6 h-32 border-white border-2 px-8">
+      <div className="flex justify-between items-center bg-green-300 rounded-2xl w-5/6 h-32 border-gray-700 dark:border-white border-2 px-8 dark:bg-gray-700">
         <NavLink
-          className="!text-green-300 font-bold text-5xl ml-8"
+          className="text-white dark:text-green-300 font-bold text-5xl ml-8"
           exact
           to="/"
         >
@@ -42,7 +42,7 @@ function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, s
         </NavLink>
         <Search searchInput={searchInput} setSearchInput={setSearchInput} />
         <NavLink
-          className="!text-green-300 text-xl hover:text-green-500"
+          className="text-white text-xl dark:text-green-300"
           to="/movies"
         >
           Movies
@@ -74,6 +74,7 @@ function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, s
         }
         <NavLink
         to="/signup"
+        className="text-black"
         >
             Sign Up
         </NavLink>
