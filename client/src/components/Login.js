@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Login({ setUser, onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const history = useHistory()
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -16,6 +19,7 @@ function Login({ setUser, onLogin }) {
       if (r.ok) {
         r.json().then((user) => {
             setUser(user)
+            history.push('/')
         });
       }
     });

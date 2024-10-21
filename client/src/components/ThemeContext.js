@@ -9,9 +9,9 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         if (isDarkMode) {
-            document.documentElement.classList.add('dark'); // Add 'dark' class
+            document.documentElement.classList.add('dark');
         } else {
-            document.documentElement.classList.remove('dark'); // Remove 'dark' class
+            document.documentElement.classList.remove('dark');
         }
     }, [isDarkMode]);
 

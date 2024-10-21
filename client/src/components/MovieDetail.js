@@ -105,13 +105,12 @@ function MovieDetail() {
                 <p className="text-green-500">{movie.release_date}</p>
             </div>
             <form onSubmit={handleSubmit} className="mt-4 flex items-center content-center justify-center">
-                <h2 className="text-xl font-semibold">Write a Review:</h2>
                 <input 
                     value={review}
                     onChange={handleReviewChange}
                     rows="4"
                     placeholder="Write your review here..."
-                    className="border w-5/6 h-10 rounded-md p-1 text-wrap"
+                    className="border w-11/12 h-10 rounded-md p-1 text-wrap pr-4"
                     required
                 />
                 <select value={rating} onChange={handleRatingChange} className="border p-2 rounded-md h-10 m-2">

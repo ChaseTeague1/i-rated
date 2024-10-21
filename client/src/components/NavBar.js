@@ -55,7 +55,7 @@ function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, s
                 </div>
             ) : (
                 <div>
-                    <button onClick={openLogin}>Login</button>
+                    <button onClick={openLogin} className="text-black dark:text-white dark:hover:text-green-300">Login</button>
                     {loginWindow && (
                         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
                             <div className="bg-white rounded-lg shadow-lg p-8 relative w-96 max-w-full">
@@ -74,7 +74,7 @@ function NavBar({ searchInput, setSearchInput, onLogin, users, user, onLogout, s
         }
         <NavLink
         to="/signup"
-        className="text-black"
+        className="text-black dark:text-white"
         >
             Sign Up
         </NavLink>

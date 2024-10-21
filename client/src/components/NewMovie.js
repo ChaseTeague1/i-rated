@@ -14,89 +14,99 @@ const NewMovie = ({ onSubmit, initialValues, genres }) => {
     genres: Yup.array().min(1, 'At least one genre must be selected').required('Required'),
   });
 
-  const history = useHistory()
+  const history = useHistory();
+
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
-        setSubmitting(false);
-        history.push('/movies')
-      }}
-    >
-      {({ isSubmitting, values, setFieldValue }) => (
-        <Form className="space-y-4">
-          <div>
-            <label htmlFor="title">Title</label>
-            <Field type="text" name="title" />
-            <ErrorMessage name="title" component="div" className="text-red-600" />
-          </div>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg m-4">
+        <h1 className="text-2xl font-bold mb-6 text-center">Add a New Movie</h1>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values, { setSubmitting }) => {
+            onSubmit(values);
+            setSubmitting(false);
+            history.push('/movies');
+          }}
+        >
+          {({ isSubmitting, values, setFieldValue }) => (
+            <Form className="space-y-4">
+              <div>
+                <label htmlFor="title" className="block font-medium mb-1">Title</label>
+                <Field type="text" name="title" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="title" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="release_date">Release Date</label>
-            <Field type="date" name="release_date" />
-            <ErrorMessage name="release_date" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="release_date" className="block font-medium mb-1">Release Date</label>
+                <Field type="date" name="release_date" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="release_date" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="director">Director</label>
-            <Field type="text" name="director" />
-            <ErrorMessage name="director" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="director" className="block font-medium mb-1">Director</label>
+                <Field type="text" name="director" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="director" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="cast">Cast</label>
-            <Field type="text" name="cast" />
-            <ErrorMessage name="cast" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="cast" className="block font-medium mb-1">Cast</label>
+                <Field type="text" name="cast" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="cast" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="description">Description</label>
-            <Field as="textarea" name="description" />
-            <ErrorMessage name="description" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="description" className="block font-medium mb-1">Description</label>
+                <Field as="textarea" name="description" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="description" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="poster_image">Poster Image URL</label>
-            <Field type="text" name="poster_image" />
-            <ErrorMessage name="poster_image" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="poster_image" className="block font-medium mb-1">Poster Image URL</label>
+                <Field type="text" name="poster_image" className="w-full p-2 border border-gray-300 rounded" />
+                <ErrorMessage name="poster_image" component="div" className="text-red-600" />
+              </div>
 
-          <div>
-            <label htmlFor="genres">Genres</label>
-            <div role="group" aria-labelledby="checkbox-group" className="space-y-2">
-              {genres.map((genre) => (
-                <label key={genre.id} className="block">
-                  <input
-                    type="checkbox"
-                    name="genres"
-                    value={genre.id}
-                    checked={values.genres.includes(genre.id)}
-                    onChange={() => {
-                      if (values.genres.includes(genre.id)) {
-                        setFieldValue(
-                          'genres',
-                          values.genres.filter((id) => id !== genre.id)
-                        );
-                      } else {
-                        setFieldValue('genres', [...values.genres, genre.id]);
-                      }
-                    }}
-                  />
-                  {genre.name}
-                </label>
-              ))}
-            </div>
-            <ErrorMessage name="genres" component="div" className="text-red-600" />
-          </div>
+              <div>
+                <label htmlFor="genres" className="block font-medium mb-1">Genres</label>
+                <div role="group" aria-labelledby="checkbox-group" className="space-y-2">
+                  {genres.map((genre) => (
+                    <label key={genre.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        name="genres"
+                        value={genre.id}
+                        checked={values.genres.includes(genre.id)}
+                        onChange={() => {
+                          if (values.genres.includes(genre.id)) {
+                            setFieldValue(
+                              'genres',
+                              values.genres.filter((id) => id !== genre.id)
+                            );
+                          } else {
+                            setFieldValue('genres', [...values.genres, genre.id]);
+                          }
+                        }}
+                      />
+                      <span>{genre.name}</span>
+                    </label>
+                  ))}
+                </div>
+                <ErrorMessage name="genres" component="div" className="text-red-600" />
+              </div>
 
-          <button type="submit" disabled={isSubmitting} className="bg-blue-500 text-white px-4 py-2">
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
   );
 };
 

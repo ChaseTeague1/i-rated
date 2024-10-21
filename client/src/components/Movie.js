@@ -12,7 +12,7 @@ function Movie({ movie }) {
           className="w-full h-full object-cover"
         />
       </div>
-      <h1 className="text-white hover:text-green-400 text-center mt-2">{movie.title}</h1>
+      <h1 className="text-black dark:text-white hover:text-green-400 text-center mt-2">{movie.title}</h1>
     </div>
     </Link>
   );

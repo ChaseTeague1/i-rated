@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Signup({ onNewUserSubmit }) {
   const [username, setUsername] = useState("");
@@ -6,6 +7,8 @@ function Signup({ onNewUserSubmit }) {
   const [role, setRole] = useState("");
   const [bio, setBio] = useState("");
   const [profile_picture, setPicture] = useState("");
+
+  const history = useHistory();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -32,6 +35,7 @@ function Signup({ onNewUserSubmit }) {
             setRole("")
             setBio("")
             setPicture("")
+            history.push('/login')
         });
       }
     });
@@ -40,8 +44,8 @@ function Signup({ onNewUserSubmit }) {
   return (
     <div className="grid grid-col-1 justify-center items-center">
       <form class="grid grid-col-1 content-center m-4" onSubmit={handleSubmit}>
-        <h1>Sign Up</h1>
-        <label htmlFor="username">Username</label>
+        <h1 className="text-black dark:text-white text-center font-bold text-xl">Sign Up</h1>
+        <label className="text-black dark:text-white" htmlFor="username">Username</label>
         <input
           className="border-2 border-black m-4 rounded-lg p-1"
           type="text"
@@ -51,7 +55,7 @@ function Signup({ onNewUserSubmit }) {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username..."
         />
-        <label htmlFor="password">Password</label>
+        <label className="text-black dark:text-white" htmlFor="password">Password</label>
         <input
           className="border-2 border-black m-4 rounded-lg p-1"
           type="password"
@@ -61,7 +65,7 @@ function Signup({ onNewUserSubmit }) {
           autoComplete="current-password"
           placeholder="Password..."
         />
-        <label>Bio</label>
+        <label className="text-black dark:text-white">Bio</label>
         <textarea 
             className="border-2 border-black m-4 rounded-lg p-1"
             id="bio"
@@ -70,6 +74,7 @@ function Signup({ onNewUserSubmit }) {
             onChange={(e) => setBio(e.target.value)}
             placeholder="Bio..."
         />
+        <label className="text-black dark:text-white">Profle Picture</label>
         <input 
             className="border-2 border-black m-4 rounded-lg p-1"
             id="picture"
@@ -78,7 +83,7 @@ function Signup({ onNewUserSubmit }) {
             onChange={(e) => setPicture(e.target.value)}
             placeholder="Profile picutre..."
         />
-        <label className="underline" htmlFor="role">Role</label>
+        <label className="text-black dark:text-white" htmlFor="role">Role</label>
         <select
           className="border-2 border-black m-4 rounded-lg p-1"
           id="role"
@@ -89,7 +94,7 @@ function Signup({ onNewUserSubmit }) {
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
-        <button type="submit">Sign Up</button>
+        <button className="bg-green-300 p-2 rounded-lg hover:bg-green-400" type="submit">Sign Up</button>
       </form>
     </div>
   );

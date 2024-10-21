@@ -122,7 +122,7 @@ function App() {
       </div>
       <Switch>
         <Route exact path="/">
-          <Home setUser={setUser} />
+          <Home movies={movies} setUser={setUser} />
         </Route>
         <Route exact path="/movies">
           <MovieList clearFilter={clearFilter} handleGenreClick={handleGenreClick} genres={genres} setMovies={setMovies} movies={moviesToDisplay} user={user} handleDelete={handleDeleteMovie}/>
