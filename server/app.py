@@ -73,10 +73,9 @@ class UserById(Resource):
     def get(self, id):
         user = User.query.filter(User.id == id).first()
         if user:
-            # Explicitly load the reviews with movie titles
             reviews = []
             for review in user.reviews:
-                review_data = review.to_dict()  # Serialize the review
+                review_data = review.to_dict()
                 review_data['movie'] = review.movie.to_dict() if review.movie else {'title': 'Unknown Movie'}
                 reviews.append(review_data)
 
@@ -111,17 +110,14 @@ class Movies(Resource):
             description = data['description'],
             poster_image = data['poster_image']
         )
-        # Add the movie to the session, but don't commit yet
         db.session.add(new_movie)
         
-        # Handle genre associations
         genre_ids = data.get('genres', [])
         for genre_id in genre_ids:
             genre = Genre.query.get(genre_id)
             if genre:
                 new_movie.genres.append(genre)
         
-        # Commit the session after adding the movie and genre associations
         db.session.commit()
 
         return make_response(new_movie.to_dict(), 201)
@@ -133,7 +129,6 @@ class MovieById(Resource):
     def get(self, id):
         movie = Movie.query.filter(Movie.id == id).first()
         if movie:
-            # Explicitly load the reviews
             reviews = [review.to_dict() for review in movie.reviews]
             genres = [genre.to_dict() for genre in movie.genres]
             movie_data = movie.to_dict()
@@ -188,14 +183,14 @@ class MovieReviews(Resource):
     def post(self, movie_id):
         user_id = session.get('user_id')
         if not user_id:
-            return {'error': 'User not logged in'}, 401  # Return error if user is not logged in
+            return {'error': 'User not logged in'}, 401 
 
         data = request.get_json()
         new_review = Review(
             comment=data['comment'],
             rating=data['rating'],
-            user_id=user_id,  # Associate the review with the logged-in user
-            movie_id=movie_id  # Associate the review with the specified movie
+            user_id=user_id,  
+            movie_id=movie_id 
         )
 
         db.session.add(new_review)
